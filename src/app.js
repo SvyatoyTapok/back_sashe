@@ -11,7 +11,7 @@ pool.query('SELECT NOW()', (err, res) => {
     }
 });
 
-const PORT = 5432;
+const PORT = '5432';
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
