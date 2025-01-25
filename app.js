@@ -1,9 +1,9 @@
-import { CONSTANTS } from './constants/constants.js'
 import express from 'express'
+import userRouter from './routes/users.js';
+const app = express();
 
-const app = express()
-app.get('/', (request, response) => {
-    response.send('Hello world!)')
+app.use(userRouter)
+
+app.listen(4300, () => {
+    console.log(`Server is started on port 4300`)
 })
-
-app.listen(CONSTANTS.PORT)
