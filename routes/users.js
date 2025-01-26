@@ -5,9 +5,9 @@ const userRouter = express.Router()
 //POST ONE USER
 userRouter.post('/users', async (request, response) => {
     try {
-        const { rows } = await db.query(`INSERT INTO users (first_name,second_name,phone) VALUES ($1,$2,$3) RETURNING id`,
+        const { rows } = await db.query(`INSERT INTO users (first_name,second_name,phone) VALUES ($1,$2,$3) RETURNING *`,
             [request.query.first_name, request.query.second_name, request.query.phone])
-        response.send({ ...rows[0], ...request.query })
+        response.send(rows[0])
     } catch (e) {
         response.status(409)
         response.send(`${e.detail}`)
@@ -17,10 +17,10 @@ userRouter.post('/users', async (request, response) => {
 //PATCH USER BY ID
 userRouter.patch('/user/:id', async (request, response) => {
     try {
-        const { rowCount } = await db.query('UPDATE users SET first_name = $1, second_name = $2, phone = $3 WHERE id = $4',
+        const dbresponse = await db.query('UPDATE users SET first_name = $1, second_name = $2, phone = $3 WHERE id = $4 RETURNING *',
             [request.query.first_name, request.query.second_name, request.query.phone, request.params.id])
-        if (rowCount === 1) {
-            response.send(request.query)
+        if (dbresponse.rowCount === 1) {
+            response.send(dbresponse.rows[0])
         } else {
             response.status(409)
             response.send(`Not found ID = ${request.params.id}`)
@@ -58,10 +58,10 @@ userRouter.get('/users', async (_, response) => {
 //DELETE USER BY ID
 userRouter.delete('/user/:id', async (request, response) => {
     try {
-        const dbresponse = await db.query('DELETE FROM users WHERE id = $1', [request.params.id])
+        const dbresponse = await db.query('DELETE FROM users WHERE id = $1 RETURNING *', [request.params.id])
         if (dbresponse.rowCount === 1) {
             response.status(200)
-            response.send(`Delete id ${request.query.id}`)
+            response.send(dbresponse.rows[0])
         } else {
             response.status(404)
             response.send(`Not found id ${request.params.id}`)

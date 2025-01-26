@@ -46,9 +46,9 @@ bookingsRouter.get('/userbookings/:id', async (request, response) => {
 //POST BOOKING
 bookingsRouter.post('/bookings', async (request, response) => {
     try {
-        const { rows } = await db.query('INSERT INTO bookings (name,time,user_id) VALUES ($1,$2,$3) RETURNING id',
+        const dbresponse = await db.query('INSERT INTO bookings (name,time,user_id) VALUES ($1,$2,$3) RETURNING *',
             [request.query.name, request.query.time, request.query.user_id])
-        response.send({ ...rows[0], ...request.query })
+        response.send(dbresponse.rows[0])
     } catch (e) {
         response.send(e)
     }
@@ -57,15 +57,16 @@ bookingsRouter.post('/bookings', async (request, response) => {
 //PATCH BOOKING
 bookingsRouter.patch('/booking/:id', async (request, response) => {
     try {
-        const { rowCount } = await db.query('UPDATE bookings SET name = $1, time = $2, user_id = $3 WHERE id = $4 RETURNING id',
+        const dbresponse = await db.query('UPDATE bookings SET name = $1, time = $2, user_id = $3 WHERE id = $4 RETURNING *',
             [request.query.name, request.query.time, request.query.user_id, request.params.id])
-        if (rowCount === 0) {
+        if (dbresponse.rowCount === 0) {
             response.status(404)
             response.send(`Not found booking with id = ${request.params.id}`)
         } else {
-            response.send({ ...request.params, ...request.query })
+            response.send(dbresponse.rows[0])
         }
     } catch (e) {
+        response.status(400)
         response.send(e)
     }
 })
@@ -81,6 +82,7 @@ bookingsRouter.delete('/booking/:id', async (request, response) => {
             response.send(`Booking with id = ${request.params.id} was deleted`)
         }
     } catch (e) {
+        response.status(400)
         response.send(e.detail)
     }
 })
