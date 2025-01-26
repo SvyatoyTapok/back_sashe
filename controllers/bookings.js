@@ -22,7 +22,7 @@ const getOneBooking = async (request, response) => {
             response.send(dbresponse.rows[0])
         }
     } catch (e) {
-        response.send(e)
+        response.send(e.detail)
     }
 }
 
@@ -65,7 +65,7 @@ const putBooking = async (request, response) => {
         }
     } catch (e) {
         response.status(400)
-        response.send(e)
+        response.send(e.detail)
     }
 }
 

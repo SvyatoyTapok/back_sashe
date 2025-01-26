@@ -65,7 +65,8 @@ const deleteUser = async (request, response) => {
             response.send(`Not found id ${request.params.id}`)
         }
     } catch (e) {
-        response.send(e)
+        response.status(409)
+        response.send(e.detail)
     }
 }
 
