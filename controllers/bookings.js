@@ -56,16 +56,16 @@ const postBooking = async (request, response) => {
 const putBooking = async (request, response) => {
     try {
         const dbresponse = await db.query('UPDATE bookings SET name = $1, time = $2, user_id = $3 WHERE id = $4 RETURNING *',
-            [request.query.name, request.query.time, request.query.user_id, request.params.id])
+            [request.query.name, request.query.time, request.query.user_id, request.query.id])
         if (dbresponse.rowCount === 0) {
             response.status(404)
-            response.send(`Not found booking with id = ${request.params.id}`)
+            response.send(`Not found booking with id = ${request.query.id}`)
         } else {
             response.send(dbresponse.rows[0])
         }
     } catch (e) {
         response.status(400)
-        response.send(e.detail)
+        response.send(e)
     }
 }
 

@@ -6,7 +6,7 @@ bookingsRouter.get('/bookings', bookingsController.getAllBookings)
 bookingsRouter.get('/bookings/:id', bookingsController.getOneBooking)
 bookingsRouter.get('/userbookings/:id', bookingsController.getUserBookings)
 bookingsRouter.post('/bookings', bookingsController.postBooking)
-bookingsRouter.put('/bookings/:id', bookingsController.putBooking)
+bookingsRouter.put('/bookings', bookingsController.putBooking)
 bookingsRouter.delete('/bookings/:id', bookingsController.deleteBooking)
 bookingsRouter.delete('/bookings', bookingsController.deleteAllBookings)
 
