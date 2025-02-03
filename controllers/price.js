@@ -32,7 +32,6 @@ const getOnePrice = async (request, response) => {
 const getByType = async (request, response) => {
     try {
         const dbres = await db.query('SELECT * FROM price WHERE price_type = $1', [request.params.type])
-        console.log(request.params.type)
         response.send(dbres.rows)
 
     } catch (e) {
