@@ -1,4 +1,3 @@
-import { query } from 'express'
 import db from '../db/db.js'
 
 //GET ALL PRICES

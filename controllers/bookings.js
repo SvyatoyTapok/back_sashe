@@ -10,6 +10,16 @@ const getAllBookings = async (_, response) => {
     }
 }
 
+//GET LAST BOOKING
+const getLastBooking = async (_, response) => {
+    try {
+        const dbresponse = await db.query('SELECT MAX(id) AS last_id FROM bookings')
+        response.send(dbresponse)
+    } catch (e) {
+        response.send(e)
+    }
+}
+
 //GET ONE BOOKING BY BOOKING ID
 const getOneBooking = async (request, response) => {
     try {
@@ -22,6 +32,7 @@ const getOneBooking = async (request, response) => {
             response.send(dbresponse.rows[0])
         }
     } catch (e) {
+        response.status(400)
         response.send(e.detail)
     }
 }
@@ -44,11 +55,12 @@ const getUserBookings = async (request, response) => {
 //POST BOOKING
 const postBooking = async (request, response) => {
     try {
-        const dbresponse = await db.query('INSERT INTO bookings (name,time,user_id) VALUES ($1,$2,$3) RETURNING *',
-            [request.query.name, request.query.time, request.query.user_id])
+        const dbresponse = await db.query('INSERT INTO bookings (id,name,time,user_id) VALUES ($1,$2,$3,$4) RETURNING *',
+            [request.query.id, request.query.name, request.query.time, request.query.user_id])
         response.send(dbresponse.rows[0])
     } catch (e) {
-        response.send(e.detail)
+        response.status(400)
+        response.send(e)
     }
 }
 
@@ -106,5 +118,6 @@ export const bookingsController = {
     postBooking,
     putBooking,
     deleteBooking,
-    deleteAllBookings
+    deleteAllBookings,
+    getLastBooking,
 }

@@ -9,7 +9,7 @@ const PORT = 4300;
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Разрешаем только этот origin
+    origin: 'http://localhost:3000',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true // Если используешь куки или авторизацию
