@@ -40,16 +40,15 @@ const getByType = async (request, response) => {
     }
 }
 
-
 //POST PRICE
 const postPrice = async (request, response) => {
     try {
-        const { rows } = await db.query('INSERT INTO price (name,cost,price_type) VALUES ($1,$2,$3) RETURNING *', [request.query.name, request.query.cost, request.query.price_type])
+        const { name, cost, price_type } = request.body
+        const { rows } = await db.query('INSERT INTO price (name,cost,price_type) VALUES ($1,$2,$3) RETURNING *', [name, cost, price_type])
         response.send(rows[0])
     } catch (e) {
         response.status(400)
-        e.detail ? response.send(e.detail) :
-            response.send(e)
+        response.send(e)
     }
 }
 

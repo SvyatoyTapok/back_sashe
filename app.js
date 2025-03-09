@@ -14,7 +14,7 @@ app.use(cors({
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true // Если используешь куки или авторизацию
 }));
-
+app.use(express.json());
 app.use('/images', express.static('images'));
 app.use(imagesRouter);
 app.use(userRouter);
