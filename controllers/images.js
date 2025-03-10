@@ -133,6 +133,18 @@ const postSmallImage = (req, res) => {
     });
 };
 
+const getAllWorkers = (_, response) => {
+    const galleryPath = path.join('images/workers');
+
+    fs.readdir(galleryPath, (err, files) => {
+        if (err) {
+            return res.status(500).send('Ошибка при чтении папки workers');
+        }
+        response.send(files);
+    });
+}
+
+
 export const imagesController = {
     getImage,
     postImage,
@@ -142,4 +154,5 @@ export const imagesController = {
     postGalleryImage,
     postBigImage,
     postSmallImage,
+    getAllWorkers,
 };

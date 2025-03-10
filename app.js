@@ -1,4 +1,4 @@
-import express from 'express'
+import express from 'express';
 import bookingsRouter from './routes/bookings.js';
 import userRouter from './routes/users.js';
 import imagesRouter from './routes/images.js';
