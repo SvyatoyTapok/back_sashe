@@ -3,19 +3,25 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Получаем __dirname в ES-модуле
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// STORAGE CONFIG
+const determineFilename = (req) => {
+    if (req.path.includes('/big')) {
+        return 'big.jpg';
+    } else if (req.path.includes('/small')) {
+        return 'small.jpg';
+    }
+};
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, 'images');
+        const uploadPath = path.join(__dirname, '../images');
         fs.mkdirSync(uploadPath, { recursive: true });
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
-        cb(null, file.originalname);
+        cb(null, determineFilename(req));
     }
 });
 const storageGallery = multer.diskStorage({
@@ -28,6 +34,7 @@ const storageGallery = multer.diskStorage({
         cb(null, file.originalname);
     }
 });
+
 const uploadGallery = multer({ storage: storageGallery });
 const upload = multer({ storage: storage });
 
@@ -67,7 +74,6 @@ const postImage = (req, res) => {
 const postGalleryImage = (req, res) => {
     uploadGallery.single('file')(req, res, (err) => {
         if (err) {
-            console.error(err);
             return res.status(500).send(`Ошибка загрузки файла: ${err.message}`);
         }
         res.send(`Файл успешно загружен в images/gallery`);
@@ -79,12 +85,10 @@ const deleteOneGallery = (req, res) => {
     const filePath = path.join('images/gallery', req.params.name);
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
-            console.error(`Файл не найден: ${filePath}`);
             return res.status(404).send(`Файл ${req.params.name} не найден`);
         }
         fs.unlink(filePath, (err) => {
             if (err) {
-                console.error(`Ошибка при удалении: ${err.message}`);
                 return res.status(500).send('Ошибка при удалении файла');
             }
             res.send(`Удалено: ${req.params.name}`);
@@ -94,7 +98,7 @@ const deleteOneGallery = (req, res) => {
 
 // DELETE IMAGE
 const deleteImage = (req, res) => {
-    const filePath = path.join(__dirname, 'images', req.params.name);
+    const filePath = path.join(__dirname, '../images', req.params.name);
 
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
@@ -110,11 +114,32 @@ const deleteImage = (req, res) => {
     });
 };
 
+//POST BIG IMAGE
+const postBigImage = (req, res) => {
+    upload.single('file')(req, res, (err) => {
+        if (err) {
+            return res.status(500).send(`Ошибка загрузки файла: ${err.message}`);
+        }
+        res.send(`Файл сохранён как big.jpg`);
+    });
+};
+
+const postSmallImage = (req, res) => {
+    upload.single('file')(req, res, (err) => {
+        if (err) {
+            return res.status(500).send(`Ошибка загрузки файла: ${err.message}`);
+        }
+        res.send(`Файл сохранён как small.jpg`);
+    });
+};
+
 export const imagesController = {
     getImage,
     postImage,
     deleteImage,
     getAllGallery,
     deleteOneGallery,
-    postGalleryImage
+    postGalleryImage,
+    postBigImage,
+    postSmallImage,
 };
