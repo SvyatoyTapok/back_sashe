@@ -138,7 +138,7 @@ const getAllWorkers = (_, response) => {
 
     fs.readdir(galleryPath, (err, files) => {
         if (err) {
-            return res.status(500).send('Ошибка при чтении папки workers');
+            return response.status(500).send('Ошибка при чтении папки workers');
         }
         response.send(files);
     });
