@@ -10,14 +10,14 @@ const PORT = 4300;
 const app = express();
 
 app.use(cors({
-    origin: 'http://sashestudio.ru',
+    origin: true,
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
 }));
-app.use(express.json()),
+app.use(express.json());
 
-    app.use('/images', express.static('images')),
+app.use('/images', express.static('images')),
     app.use(
         workersRouter,
         priceRouter,
