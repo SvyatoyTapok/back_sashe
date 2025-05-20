@@ -10,12 +10,11 @@ const PORT = 4300;
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://sashestudio.ru',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
 }));
-
 app.use(express.json()),
 
     app.use('/images', express.static('images')),
