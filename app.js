@@ -10,7 +10,7 @@ const PORT = 4300;
 const app = express();
 
 app.use(cors({
-    origin: 'https://sashestudio.ru',
+    origin: 'http://sashestudio.ru',
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization',
     credentials: true
