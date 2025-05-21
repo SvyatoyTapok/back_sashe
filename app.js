@@ -14,6 +14,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
+app.use('/gallery', express.static('/images/gallery', { redirect: false }));
 app.use(express.json());
 
 app.use('/images', express.static('images')),
