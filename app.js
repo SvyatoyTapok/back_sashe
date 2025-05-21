@@ -8,14 +8,14 @@ import cors from 'cors';
 
 const PORT = 4300;
 const app = express();
+const __dirname = path.resolve();
 
 app.use(cors({
     origin: 'https://sashestudio.ru',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
-app.use('/gallery', express.static('/images/gallery', { redirect: false }));
-app.use(express.json());
+app.use('/images/gallery', express.static(path.join(__dirname, 'images', 'gallery'), { redirect: false })); app.use(express.json());
 
 app.use('/images', express.static('images')),
     app.use(
